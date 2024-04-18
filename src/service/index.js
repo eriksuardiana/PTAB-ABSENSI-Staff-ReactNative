@@ -47,7 +47,7 @@ const absenceHistoryRequests = (USER_ID, page, date, date2, TOKEN) =>
   );
 
 const menu = (STAFF_ID, TOKEN) =>
-  Get(Config.menu + '=' + STAFF_ID + '&version=2024-03-07', false, TOKEN);
+  Get(Config.menu + '=' + STAFF_ID + '&version=2024-04-18', false, TOKEN);
 
 const chart = (STAFF_ID, TOKEN) =>
   Get(Config.chart + '=' + STAFF_ID, false, TOKEN);

@@ -21,14 +21,19 @@ import {useSelector} from 'react-redux';
 import {RadioButton} from 'react-native-paper';
 
 const Permit = ({navigation}) => {
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth() + 1; // Bulan dimulai dari 0 (Januari)
+  const dates = currentDate.getDate();
   const TOKEN = useSelector(state => state.TokenReducer);
   const USER = useSelector(state => state.UserReducer);
   const USER_ID = useSelector(state => state.UserReducer.id);
   const STAFF_ID = useSelector(state => state.UserReducer.staff_id);
   const [date1, setDate1] = useState(new Date(1598051730000));
   const [date, setDate] = useState('0000-00-00');
-  const [date2, setDate2] = useState('0000-00-00');
+  const [date2, setDate2] = useState(new Date(1598051730000));
   const [time, setTime] = useState('00:00');
+  const [time2, setTime2] = useState('00:00');
   const [show, setShow] = useState(false);
   const [show1, setShow1] = useState(false);
   const [type, setType] = useState('start');
@@ -45,9 +50,12 @@ const Permit = ({navigation}) => {
     time: '',
     status: 'pending',
     category: 'excuse',
+    attendance: '',
   });
   // Api start
   const handleAction = () => {
+    // Alert.alert(JSON.stringify(form));
+    console.log(form);
     let dataUpload = [];
     dataUpload = [
       {
@@ -104,6 +112,39 @@ const Permit = ({navigation}) => {
     showMode('time');
   };
 
+  const onChangeStart2 = (event, selectedDate) => {
+    const currentDate = selectedDate || date2;
+    setShow1(Platform.OS === 'ios');
+    let hours = currentDate.getHours();
+    let minutes = currentDate.getMinutes();
+
+    let time = `${hours} : ${minutes}`;
+    setForm({
+      ...form,
+      attendance:
+        year +
+        '-' +
+        month +
+        '-' +
+        dates +
+        ' ' +
+        currentDate.getHours() +
+        ':' +
+        currentDate.getMinutes() +
+        ':00',
+    });
+    setTime2(time);
+    console.log(time);
+    setDate2(currentDate);
+  };
+  const showMode2 = currentMode => {
+    setShow1(true);
+    setMode(currentMode);
+  };
+  const showTimepicker2 = () => {
+    showMode2('time');
+  };
+
   useEffect(() => {
     // if(isFocused){
     console.log('test');
@@ -139,7 +180,11 @@ const Permit = ({navigation}) => {
               <RadioButton
                 value="out"
                 status={form.type === 'out' ? 'checked' : 'unchecked'}
-                onPress={() => setForm({...form, type: 'out'})}
+                onPress={() => {
+                  setForm({...form, type: 'out'});
+                  // setForm({...form, attendance: ''});
+                  setTime2('00:00');
+                }}
               />
               <Text style={{marginTop: 10}}>Tidak Kembali</Text>
             </View>
@@ -161,6 +206,26 @@ const Permit = ({navigation}) => {
               <Text style={styles.text}>{time}</Text>
             </View>
           </TouchableOpacity>
+          {form.type === 'back' && (
+            <>
+              <Text>
+                Jam Berakhir<Text style={{color: '#ff0000'}}>*</Text>
+              </Text>
+              <TouchableOpacity
+                style={styles.input}
+                onPress={() => {
+                  showTimepicker2();
+                  setType('start');
+                }}
+                title="Mulai Pukul">
+                <View style={{flexDirection: 'row'}}>
+                  {/* <FontAwesomeIcon icon={faClock} style={{color:'#FFFFFF'}} size={ 20 } /> */}
+                  {/* <Distance distanceH={5}/> */}
+                  <Text style={styles.text}>{time2}</Text>
+                </View>
+              </TouchableOpacity>
+            </>
+          )}
 
           <Text style={styles.title}>Memo</Text>
           <Textarea
@@ -182,6 +247,17 @@ const Permit = ({navigation}) => {
               is24Hour={true}
               display="spinner"
               onChange={type == 'end' ? onChangeEnd : onChangeStart}
+            />
+          )}
+
+          {show1 && (
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={date2}
+              mode={mode}
+              is24Hour={true}
+              display="spinner"
+              onChange={type == 'end' ? onChangeEnd : onChangeStart2}
             />
           )}
         </ScrollView>

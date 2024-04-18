@@ -308,10 +308,21 @@ const HistoryRequest = ({navigation}) => {
           <Text style={styles.title}>Berakhir</Text>
           <Text style={styles.value}>: {item.end.substring(0, 10)}</Text>
         </View>
+
         <View style={{flexDirection: 'row'}}>
           <Text style={styles.title}>Jam</Text>
           <Text style={styles.value}>: {item.time}</Text>
         </View>
+
+        {item.category == 'excuse' && item.attendance && (
+          <View style={{flexDirection: 'row'}}>
+            <Text style={styles.title}>Jam Kembali</Text>
+            <Text style={styles.value}>
+              : {item.attendance.substring(11, 16)}
+            </Text>
+          </View>
+        )}
+
         <View style={{flexDirection: 'row'}}>
           <Text style={styles.title}>Deskripsi</Text>
           <Text style={styles.value}>: {item.description}</Text>

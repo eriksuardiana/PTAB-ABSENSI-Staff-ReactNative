@@ -38,7 +38,7 @@ const Home = ({navigation}) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log('di home');
+    console.log('di home', JailMonkey.isJailBroken());
     if (Platform.OS === 'android') {
       reactNativeAndroidLocationServicesDialogBox
         .checkLocationServicesIsEnabled({
@@ -520,7 +520,7 @@ const Home = ({navigation}) => {
               marginRight: windowWidht * 0.02,
               backgroundColor: '#FFFFFF',
             }}>
-            V-24.03.07
+            V-24.04.18
           </Text>
         </SafeAreaView>
         <Footer focus="Home" navigation={navigation} />
